@@ -60,7 +60,18 @@ def listar_usuarios():
             cursor = conexao.cursor()
             cursor.execute("SELECT * FROM usuarios")
             usuarios = cursor.fetchall() #fetchall retorna todos os registros encontrados
-            
+            list=[]
+            for user in usuarios:
+                dict={
+                    "id": user[0],
+                    "nome": user[1],
+                    "email": user[2],
+                    "idade": user[3],
+                }
+                list.append(dict)
+            print(f"lista: {list}")
+            json = jsonify(list)
+            print(f"usuarios fetchall {usuarios}")
             return usuarios
   
     except sqlite3.IntegrityError as erro:
@@ -135,9 +146,9 @@ def deletar_usuario(id):
 
 
 criar_tabela() 
-criar_usuario("Elo","elolinda@gmail.com",20)
-criar_usuario("Daniel","daniel@gmail.com",20)
-criar_usuario("Viviane","vivi@gmail.com",47)
+# criar_usuario("Elo","elolinda@gmail.com",20)
+# criar_usuario("Daniel","daniel@gmail.com",20)
+# criar_usuario("Viviane","vivi@gmail.com",47)
 app = Flask (__name__)
 
 
@@ -148,8 +159,7 @@ def hw():
 @app.route("/usuarios")
 def users():
       usuarios = listar_usuarios()
-      print(usuarios)
-      return f"<p> oi</p>"
+      return f"<p>{usuarios}</p>"
           
 
 
@@ -157,8 +167,5 @@ def users():
 def about():
       return "about us"
 
-DB = "database.db"
 
-def conectar():
-    return sqlite3.connect(DB)
 
